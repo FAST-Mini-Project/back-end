@@ -9,15 +9,16 @@ import java.time.LocalDateTime;
 @Data
 public class Annual {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "date")
     private LocalDateTime date;
 
     @Column(name = "status")
+    @Enumerated(EnumType.STRING)
     private AnnualStatus status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
 }
