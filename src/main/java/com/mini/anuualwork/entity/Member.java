@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Data
 public class Member {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
@@ -23,8 +23,8 @@ public class Member {
     @Column(name = "employeeNumber")
     private String employeeNumber;
 
+
+    @Column(name = "memberRole")
     @Enumerated(EnumType.STRING)
     MemberRole memberRole;
-
-
 }
