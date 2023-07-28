@@ -14,13 +14,13 @@ import java.util.List;
 public class AdminService {
     private static final Long TOTAL_ANNUAL_COUNT = 15L;
 
-    private final AdminMemberRepository adminMemberRepository;
+    private final AdminMemberRepository memberRepository;
 
     public ApiDataResponse<?> getAllMembers() {
         int year = LocalDateTime.now().getYear();
 
         List<AdminDto.RequestAllMembers> allMembers =
-                adminMemberRepository.getAllMembersWithAnnualCountAndWorkCount(TOTAL_ANNUAL_COUNT, year);
+                memberRepository.getAllMembersWithAnnualCountAndWorkCount(TOTAL_ANNUAL_COUNT, year);
 
         return new ApiDataResponse<>(allMembers);
     }
