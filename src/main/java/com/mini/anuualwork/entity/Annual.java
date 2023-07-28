@@ -1,5 +1,6 @@
 package com.mini.anuualwork.entity;
 
+import com.mini.anuualwork.entity.type.AnnualStatus;
 import lombok.Data;
 
 import javax.persistence.*;
