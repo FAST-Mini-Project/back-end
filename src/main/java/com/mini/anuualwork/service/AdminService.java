@@ -22,7 +22,7 @@ public class AdminService {
     private final AdminWorkRepository workRepository;
     private final AdminAnnualRepository annualRepository;
 
-    public ApiDataResponse<?> getAllMembers() {
+    public ApiDataResponse<List<AdminDto.RequestAllMembers>> getAllMembers() {
         int year = LocalDateTime.now().getYear();
 
         List<AdminDto.RequestAllMembers> allMembers =
@@ -32,7 +32,7 @@ public class AdminService {
     }
 
     @Transactional
-    public ApiDataResponse<?> deleteMember(Long id) {
+    public ApiDataResponse<AdminDto.ResponseSuccess> deleteMember(Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 유저입니다."));
 
