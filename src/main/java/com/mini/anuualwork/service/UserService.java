@@ -2,6 +2,7 @@ package com.mini.anuualwork.service;
 
 import com.mini.anuualwork.core.ApiDataResponse;
 import com.mini.anuualwork.dto.LoginDto;
+import com.mini.anuualwork.dto.LogoutDto;
 import com.mini.anuualwork.dto.SignupDto;
 import com.mini.anuualwork.entity.Member;
 import com.mini.anuualwork.entity.type.MemberRole;
@@ -73,6 +74,11 @@ public class UserService {
         return new ApiDataResponse<>(new SignupDto.ResponseSignupSuccess());
 
 
+    }
+
+    public ApiDataResponse<LogoutDto> logout(String token){
+        JwtUtil.deleteJwt(token,secretKey);
+        return new ApiDataResponse<>(new LogoutDto());
     }
 }
 

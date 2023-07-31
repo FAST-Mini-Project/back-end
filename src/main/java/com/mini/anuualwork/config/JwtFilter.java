@@ -52,13 +52,13 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
 
-        //userName 꺼내기
-        String userName = JwtUtil.getUserName(token,secretKey);
+        //email 꺼내기
+        String userName = JwtUtil.getEmail(token,secretKey);
         log.info("이름을 꺼냅니다. {}",userName);
 
         // 권한 부여
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken
-                (userName,null, List.of(new SimpleGrantedAuthority("USER")));
+                (userName,null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
         // Detail을 넣어줍니다.
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         //contextHolder에 authentication set
@@ -67,6 +67,6 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    //Detail을 넣어주는 부분
+
 
 }
