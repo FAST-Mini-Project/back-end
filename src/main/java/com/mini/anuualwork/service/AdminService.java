@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -66,9 +67,12 @@ public class AdminService {
     }
 
     public ApiDataResponse<List<ResponseAnnual>> getAnnualList() {
-        List<ResponseAnnual> allAnnuals = this.annualRepository.findAnnualsIsUnapprovedOrCanceled(getThisYear());
+        List<ResponseAnnual> response = this.annualRepository.findAnnualsIsUnapprovedOrCanceled(getThisYear())
+                .stream()
+                .map(ResponseAnnual::fromEntity)
+                .collect(Collectors.toList());
 
-        return new ApiDataResponse<>(allAnnuals);
+        return new ApiDataResponse<>(response);
     }
 
     private int getThisYear() {
