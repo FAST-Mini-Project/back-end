@@ -25,8 +25,8 @@ public class AdminService {
     private final AdminWorkRepository workRepository;
     private final AdminAnnualRepository annualRepository;
 
-    public ApiDataResponse<List<RequestAllMembers>> getAllMembers() {
-        List<RequestAllMembers> allMembers =
+    public ApiDataResponse<List<ResponseMember>> getAllMembers() {
+        List<ResponseMember> allMembers =
                 memberRepository.getAllMembersWithAnnualCountAndWorkCount(TOTAL_ANNUAL_COUNT, getThisYear());
 
         return new ApiDataResponse<>(allMembers);
