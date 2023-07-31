@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class AdminDto {
 
     /* 집계 쿼리가 포함된 JPQL Projection 결과를 Converting 하기 위해서는 interface + Getter 사용 */
-    public interface RequestAllMembers {
+    public interface ResponseMember {
         Long getId();
         String getName();
         String getEmail();
