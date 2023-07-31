@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class AdminDto {
 
@@ -49,16 +50,34 @@ public class AdminDto {
     }
 
     /* Projection 결과를 받아서 @Value()에서 Client 에서 원하는 데이터로 가공 */
-    public interface ResponseAnnual {
+    public interface ResponseAnnualEntity {
         Long getAnnualId();
         String getName();
-
-        @Value("#{'#' + target.employeeNumber.substring(0, 4)}")
         String getEmployeeNumber();
-
-        @Value("#{target.date.toString().split('T')[0]}")
-        String getDate();
+        LocalDateTime getDate();
         AnnualStatus getStatus();
-        void setEmployeeNumber();
+    }
+
+    @Builder
+    @Getter
+    public static class ResponseAnnual {
+        private Long annualId;
+        private String name;
+        private String employeeNumber;
+        private String date;
+        private AnnualStatus status;
+
+        public static ResponseAnnual fromEntity(ResponseAnnualEntity entity) {
+            String formattedEmployeeNumber = "#" + entity.getEmployeeNumber().substring(0, 4);
+            String formattedDate = entity.getDate().toString().split("T")[0];
+
+            return ResponseAnnual.builder()
+                    .annualId(entity.getAnnualId())
+                    .name(entity.getName())
+                    .employeeNumber(formattedEmployeeNumber)
+                    .date(formattedDate)
+                    .status(entity.getStatus())
+                    .build();
+        }
     }
 }
