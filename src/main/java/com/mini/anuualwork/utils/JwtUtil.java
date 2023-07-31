@@ -20,13 +20,12 @@ public class JwtUtil {
                 .getBody().getExpiration().before(new Date());
     }
 
-    public static String createJwt(String userName,String secretKey,Long expiredMs){
+    public static String createJwt(String email,String secretKey,Long expiredMs){
         //Claim => 유저 정보를 담아놓을 수 있음.
         Claims claims = Jwts.claims();
-        claims.put("userName",userName);
-        log.info("유저네임 {}",userName);
+        claims.put("email",email);
+        log.info("토큰이 발급되었습니다. 발급된 이메일 {}",email);
 
-        log.info("토큰이 발급되었습니다.");
         return Jwts.builder()
                 .setClaims(claims) // 유저 정보 설정
                 .setIssuedAt(new Date(System.currentTimeMillis())) // 생성 일자
