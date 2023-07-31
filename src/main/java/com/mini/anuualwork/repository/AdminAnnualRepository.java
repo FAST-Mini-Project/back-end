@@ -23,5 +23,5 @@ public interface AdminAnnualRepository extends JpaRepository<Annual, Long> {
             "INNER JOIN Member m " +
             "ON a.member.id = m.id " +
             "WHERE YEAR(a.date) >= :thisYear AND a.status != 'APPROVED'")
-    List<ResponseAnnual> findAnnualsIsUnapprovedOrCanceled(@Param("thisYear") Integer thisYear);
+    List<ResponseAnnualEntity> findAnnualsIsUnapprovedOrCanceled(@Param("thisYear") Integer thisYear);
 }
