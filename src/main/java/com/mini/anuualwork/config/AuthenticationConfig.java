@@ -10,6 +10,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -20,7 +22,10 @@ public class AuthenticationConfig {
 
     @Value("${jwt.secret}")
     private String secretKey;
+
+
     private final UserService userService;
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -29,8 +34,8 @@ public class AuthenticationConfig {
                 .csrf().disable()
                 .cors().and()
                 .authorizeRequests()
-                .antMatchers("/api/login").permitAll() //login은 모든 접근 허용함
-                .antMatchers(HttpMethod.POST,"/api/**").authenticated()
+                .antMatchers("/api/login", "/api/signup").permitAll() //login은 모든 접근 허용함
+//                .antMatchers(HttpMethod.POST,"/api/**").authenticated()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 쓴다는데 더 공부해야 할듯?(to do)
