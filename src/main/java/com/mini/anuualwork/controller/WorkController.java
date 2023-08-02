@@ -4,6 +4,7 @@ import com.mini.anuualwork.core.ApiDataResponse;
 import com.mini.anuualwork.dto.WorkDto;
 import com.mini.anuualwork.service.WorkService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +21,12 @@ public class WorkController {
     @GetMapping("/api/schedule/work")
     public ApiDataResponse<List<WorkDto.WorkInfoResponse>> getWorkInfoList(@RequestParam Integer year, @RequestParam Integer month){
         return workService.getWorkInfoList(year, month);
+    }
+
+    //개인 당직 조회
+    @GetMapping("/api/user/work")
+    public ApiDataResponse<?> getMemberWorkList(Authentication authentication, @RequestParam Integer year, @RequestParam Integer month){
+        return workService.getMemberWorkList(authentication.getName(), year, month);
     }
 
 }
