@@ -11,4 +11,9 @@ public class WorkDto {
         Date getDate();
     }
 
+    public interface MemberWorkResponse{
+        Long getDutyId();
+        Date getDate();
+    }
+
 }
