@@ -24,6 +24,6 @@ public interface AdminMemberRepository extends JpaRepository<Member, Long> {
             ") AS workDay " +
             "FROM Member m " +
             "ORDER BY m.id ASC")
-    List<AdminDto.ResponseMember> getAllMembersWithAnnualCountAndWorkCount(
+    List<AdminDto.ResponseMemberEntity> getAllMembersWithAnnualCountAndWorkCount(
             @Param("totalAnnualCount") Long totalAnnualCount, @Param("year") Integer year);
 }
