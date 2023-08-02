@@ -28,7 +28,10 @@ public class AdminService {
 
     public ApiDataResponse<List<ResponseMember>> getAllMembers() {
         List<ResponseMember> allMembers =
-                memberRepository.getAllMembersWithAnnualCountAndWorkCount(TOTAL_ANNUAL_COUNT, getThisYear());
+                memberRepository.getAllMembersWithAnnualCountAndWorkCount(TOTAL_ANNUAL_COUNT, getThisYear())
+                        .stream()
+                        .map(ResponseMember::fromEntity)
+                        .collect(Collectors.toList());
 
         return new ApiDataResponse<>(allMembers);
     }

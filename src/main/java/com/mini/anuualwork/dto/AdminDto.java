@@ -4,7 +4,6 @@ import com.mini.anuualwork.entity.Member;
 import com.mini.anuualwork.entity.Work;
 import com.mini.anuualwork.entity.type.AnnualStatus;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
@@ -14,13 +13,33 @@ import java.time.LocalDateTime;
 public class AdminDto {
 
     /* 집계 쿼리가 포함된 JPQL Projection 결과를 Converting 하기 위해서는 interface + Getter 사용 */
-    public interface ResponseMember {
+    public interface ResponseMemberEntity {
         Long getId();
         String getName();
         String getEmail();
         String getEmployeeNumber();
         Integer getRestAnnual();
         Integer getWorkDay();
+    }
+
+    @Getter
+    @Builder
+    public static class ResponseMember {
+        private Long id;
+        private String name;
+        private String employeeNumber;
+        private Integer restAnnual;
+        private Integer workDay;
+
+        public static ResponseMember fromEntity(ResponseMemberEntity entity) {
+            return ResponseMember.builder()
+                    .id(entity.getId())
+                    .name(entity.getName())
+                    .employeeNumber("#" + entity.getEmployeeNumber().substring(4, 8))
+                    .restAnnual(entity.getRestAnnual())
+                    .workDay(entity.getWorkDay())
+                    .build();
+        }
     }
 
     @NoArgsConstructor
@@ -58,8 +77,8 @@ public class AdminDto {
         AnnualStatus getStatus();
     }
 
-    @Builder
     @Getter
+    @Builder
     public static class ResponseAnnual {
         private Long annualId;
         private String name;
@@ -68,8 +87,8 @@ public class AdminDto {
         private AnnualStatus status;
 
         public static ResponseAnnual fromEntity(ResponseAnnualEntity entity) {
-            String formattedEmployeeNumber = "#" + entity.getEmployeeNumber().substring(0, 4);
-            String formattedDate = entity.getDate().toString().split("T")[0];
+            String formattedEmployeeNumber = "#" + entity.getEmployeeNumber().substring(4, 8);
+            String formattedDate = entity.getDate().toLocalDate().toString();
 
             return ResponseAnnual.builder()
                     .annualId(entity.getAnnualId())
