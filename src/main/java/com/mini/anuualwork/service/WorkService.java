@@ -20,4 +20,10 @@ public class WorkService {
         return new ApiDataResponse<>(workList);
     }
 
+    public ApiDataResponse<?> getMemberWorkList(String email, Integer year, Integer month){
+        List<WorkDto.MemberWorkResponse> memberWorkList = workRepository.findWorks(email, year, month);
+
+        return new ApiDataResponse<>(memberWorkList);
+    }
+
 }
