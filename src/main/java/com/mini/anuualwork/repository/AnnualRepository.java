@@ -17,5 +17,11 @@ public interface AnnualRepository extends JpaRepository<Annual, Long> {
             "where YEAR(a.date) = :year and MONTH(a.date) = :month")
     List<AnnualDto.AnnualInfoResponse> findAllByMember(@Param("year") Integer year, @Param("month") Integer month);
 
+    @Query("select a.id as annualId, DATE(a.date) as date, a.status as status " +
+            "from Annual a inner join Member m " +
+            "on a.member.id = m.id " +
+            "where YEAR(date) = :year and m.email = :email")
+    List<AnnualDto.MemberAnnualResponse> findAnnuals(@Param("email") String email, @Param("year") Integer year);
+
 }
 

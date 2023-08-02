@@ -2,12 +2,13 @@ package com.mini.anuualwork.service;
 
 import com.mini.anuualwork.core.ApiDataResponse;
 import com.mini.anuualwork.dto.AnnualDto;
-import com.mini.anuualwork.entity.Work;
 import com.mini.anuualwork.repository.AnnualRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -22,8 +23,10 @@ public class AnnualService {
         return new ApiDataResponse<>(annualList);
     }
 
-    public ApiDataResponse<String> requestAnnual(HashMap<String, String> requestMap){
-        return null;
+    public ApiDataResponse<?> getMemberAnnualList(String email, Integer year){
+        List<AnnualDto.MemberAnnualResponse> memberAnnualList = annualRepository.findAnnuals(email, year);
+
+        return new ApiDataResponse<>(memberAnnualList);
     }
 
 }
