@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface WorkRepository extends JpaRepository<Work, Long> {
 
-    @Query("select w.id as workId, DATE(w.date) as date, m.name as name, m.employeeNumber as employeeNumber " +
+    @Query("select w.id as workId, DATE(w.date) as date, m.name as name, concat('#', substring(m.employeeNumber, 5, 4)) as employeeNumber " +
             "from Work w " +
             "inner join Member m " +
             "on w.member.id = m.id where YEAR(w.date) = :year and MONTH(w.date) = :month")
