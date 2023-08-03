@@ -1,5 +1,7 @@
 package com.mini.anuualwork.config;
 
+import com.mini.anuualwork.component.JwtAccessDeniedHandler;
+import com.mini.anuualwork.component.JwtAuthenticationEntryPoint;
 import com.mini.anuualwork.service.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -11,7 +13,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -26,25 +27,43 @@ public class AuthenticationConfig {
     @Value("${jwt.secret}")
     private String secretKey;
 
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
-    private final UserService userService;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+
+        String[] permitAllEndPoints = {
+                "/api/login", "/api/logout", "/api/signup", "/favicon.ico",
+                "/static/js/**", "/static/image/**", "/static/css/**", "/static/scss/**"
+        };
+
         return httpSecurity
                 .httpBasic().disable()
                 .csrf().disable()
                 .cors().configurationSource(configurationSource())
                 .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .accessDeniedHandler(jwtAccessDeniedHandler)
+                .and()
                 .authorizeRequests()
-                .antMatchers("/api/login", "/api/signup").permitAll() //login은 모든 접근 허용함
-//                .antMatchers(HttpMethod.POST,"/api/**").authenticated()
+                .antMatchers(HttpMethod.GET, "/api/schedule/**").permitAll()
+                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers("/api/user/**", "/api/schedule/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers(permitAllEndPoints).permitAll()
+                .anyRequest().authenticated() // 위에 지정한 antMatchers 이외에는 모두 인증 받아야 한다.
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 쓴다는데 더 공부해야 할듯?(to do)
                 .and()
-                .addFilterBefore(new JwtFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(secretKey), UsernamePasswordAuthenticationFilter.class)
                 //UserNamePasswordAuthenticationFilter적용하기 전에 JWTTokenFilter를 적용 하라는 뜻
                 .build();
     }
