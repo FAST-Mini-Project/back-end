@@ -1,5 +1,6 @@
 package com.mini.anuualwork.utils;
 
+import com.mini.anuualwork.entity.type.MemberRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -15,15 +16,21 @@ public class JwtUtil {
                 .getBody().get("email",String.class);
     }
 
+    public static String getRole(String token,String secretKey){
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+                .getBody().get("role",String.class);
+    }
+
     public static boolean isExpired(String token, String secretKey){
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
                 .getBody().getExpiration().before(new Date());
     }
 
-    public static String createJwt(String email,String secretKey,Long expiredMs){
+    public static String createJwt(String email, MemberRole role, String secretKey, Long expiredMs){
         //Claim => 유저 정보를 담아놓을 수 있음.
         Claims claims = Jwts.claims();
         claims.put("email",email);
+        claims.put("role",role);
         log.info("토큰이 발급되었습니다. 발급된 이메일 {}",email);
 
         return Jwts.builder()
