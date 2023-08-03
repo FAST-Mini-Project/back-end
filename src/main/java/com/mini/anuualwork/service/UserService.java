@@ -45,7 +45,7 @@ public class UserService {
         loginMemberDto.setEmail(member.getEmail());
         loginMemberDto.setName(member.getName());
         loginMemberDto.setRole(member.getMemberRole());
-        loginMemberDto.setEmployeeNumber(member.getEmployeeNumber().substring(4,8));
+        loginMemberDto.setEmployeeNumber("#" + member.getEmployeeNumber().substring(4,8));
 
 
         //성공한다면, jwt 줌.
