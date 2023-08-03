@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +28,17 @@ public class UserService {
 
     private Long expriedMs = 1000 * 60 * 60l;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     private final LoginMemberRepository loginMemberRepository;
+
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
 
     public ApiDataResponse<LoginDto.ResponseLoginSuccess> login(String email, String password){
+
 
         Member member = loginMemberRepository.findByEmail(email).
                 orElseThrow(() -> new RuntimeException("잘못된 이메일입니다."));
@@ -41,17 +47,25 @@ public class UserService {
         if(!bCryptPasswordEncoder.matches(password, member.getPassword()))
             throw new RuntimeException("잘못된 비밀번호입니다.");
 
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken
+                = new UsernamePasswordAuthenticationToken(email, password);
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
+
+
+
         LoginDto.LoginMemberDto loginMemberDto = new LoginDto.LoginMemberDto();
         loginMemberDto.setEmail(member.getEmail());
         loginMemberDto.setName(member.getName());
         loginMemberDto.setRole(member.getMemberRole());
-        loginMemberDto.setEmployeeNumber(member.getEmployeeNumber().substring(4,8));
+        loginMemberDto.setEmployeeNumber("#" + member.getEmployeeNumber().substring(4,8));
 
 
         //성공한다면, jwt 줌.
-        String token = JwtUtil.createJwt(email,secretKey,expriedMs);
+        String token = JwtUtil.createJwt(email,member.getMemberRole(),secretKey,expriedMs);
 
         return new ApiDataResponse<>(new LoginDto.ResponseLoginSuccess(loginMemberDto,token));
+
+
     }
 
     public ApiDataResponse<SignupDto.ResponseSignupSuccess> join(SignupDto joinRequestDto){
