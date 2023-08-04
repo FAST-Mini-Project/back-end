@@ -26,6 +26,10 @@ public class AdminService {
     private final AdminWorkRepository workRepository;
     private final AdminAnnualRepository annualRepository;
 
+    public ApiDataResponse<?> checkAdminAuth() {
+        return new ApiDataResponse<>("관리자 접근 권한이 확인되었습니다.");
+    }
+
     public ApiDataResponse<List<ResponseMember>> getAllMembers() {
         List<ResponseMember> allMembers =
                 memberRepository.getAllMembersWithAnnualCountAndWorkCount(TOTAL_ANNUAL_COUNT, getThisYear())
