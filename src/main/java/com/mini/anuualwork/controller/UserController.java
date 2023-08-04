@@ -1,6 +1,7 @@
 package com.mini.anuualwork.controller;
 
 import com.mini.anuualwork.core.ApiDataResponse;
+import com.mini.anuualwork.dto.CorrectDto;
 import com.mini.anuualwork.dto.LoginDto;
 import com.mini.anuualwork.dto.LogoutDto;
 import com.mini.anuualwork.dto.SignupDto;
@@ -38,6 +39,12 @@ public class UserController {
     public ApiDataResponse<LogoutDto> logout(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization) {
         String token = authorization.split(" ")[1];
         return userService.logout(token);
+    }
+
+    @RequestMapping(value = "/api/user", method = RequestMethod.PUT)
+    public ApiDataResponse<CorrectDto.CorrectSuccess> correct(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization, @RequestBody CorrectDto correctDto){
+        String token = authorization.split(" ")[1];
+       return userService.correct(correctDto, token);
     }
 
 

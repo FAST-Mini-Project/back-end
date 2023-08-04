@@ -27,4 +27,15 @@ public class AnnualController {
         return annualService.getMemberAnnualList(authentication.getName(), year);
     }
 
+    @PostMapping("/api/schedule/annual")
+    public ApiDataResponse<?> createAnnual(Authentication authentication, @RequestBody AnnualDto.AnnualDate annualDate){
+        return annualService.requestAnnual(authentication.getName(), annualDate);
+    }
+
+    //개인 연차 취소 및 취소 신청
+    @PostMapping("/api/user/annual/{id}")
+    public ApiDataResponse<?> updateAnnual(Authentication authentication, @PathVariable Long id){
+        return annualService.updateAnnual(authentication.getName(), id);
+    }
+
 }
