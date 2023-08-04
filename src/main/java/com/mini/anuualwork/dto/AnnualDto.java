@@ -5,6 +5,8 @@ import com.mini.anuualwork.entity.Member;
 import com.mini.anuualwork.entity.type.AnnualStatus;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
@@ -27,9 +29,17 @@ public class AnnualDto {
         AnnualStatus getStatus();
     }
 
-    @Data
+    @Getter
+    @Setter
+    @NoArgsConstructor
     public static class AnnualResponse{
-        private final String message;
+        private String message;
+
+        public AnnualResponse(String message){
+            this.message = message;
+        }
+
+
     }
 
     @Data

@@ -10,6 +10,7 @@ import com.mini.anuualwork.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,6 +42,7 @@ public class AnnualService {
         return new ApiDataResponse<>(memberAnnualList);
     }
 
+    @Transactional
     public ApiDataResponse<?> requestAnnual(String email, String request) throws ParseException {
         //json 파싱 -> string을 date로 변환
         String data = null;
@@ -67,5 +69,29 @@ public class AnnualService {
         annualRepository.save(annual);
 
         return new ApiDataResponse<>(new AnnualDto.AnnualResponse("연차 등록에 성공했습니다."));
+    }
+
+    @Transactional
+    public ApiDataResponse<?> updateAnnual(String email, Long id) {
+        AnnualDto.AnnualResponse response = new AnnualDto.AnnualResponse("신청이 완료되지 않았습니다.");
+
+        Member member = memberRepository.findMemberByEmail(email);
+
+        Annual annual = annualRepository.findById(id).orElseThrow(() -> new RuntimeException("존재하지 않습니다."));
+
+        if(member != null && member.getId() == annual.getMember().getId()){
+
+            if(annual.getStatus() == AnnualStatus.UNAPPROVED){
+                annualRepository.deleteById(id);
+                response.setMessage("연차 취소가 완료되었습니다.");
+            }
+            else if(annual.getStatus() == AnnualStatus.APPROVED){
+                annual.setStatus(AnnualStatus.CANCELED);
+                annualRepository.save(annual);
+                response.setMessage("연차 취소 신청이 완료되었습니다.");
+            }
+        }
+
+        return new ApiDataResponse<>(response);
     }
 }
