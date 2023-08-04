@@ -1,18 +1,15 @@
 package com.mini.anuualwork.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.mini.anuualwork.entity.Annual;
 import com.mini.anuualwork.entity.Member;
 import com.mini.anuualwork.entity.type.AnnualStatus;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 public class AnnualDto {
 
@@ -38,16 +35,22 @@ public class AnnualDto {
         public AnnualResponse(String message){
             this.message = message;
         }
-
-
     }
 
     @Data
     public static class AnnualDate{
 
-        private LocalDate date;
+        private Timestamp date;
         private AnnualStatus status;
         private Member member;
+
+        public Annual toEntity(){
+            Annual annual = new Annual();
+            annual.setDate(this.date.toLocalDateTime());
+
+            return annual;
+        }
     }
+
 
 }
