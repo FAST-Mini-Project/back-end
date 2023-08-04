@@ -27,6 +27,7 @@ public class AdminDto {
     public static class ResponseMember {
         private Long id;
         private String name;
+        private String email;
         private String employeeNumber;
         private Integer restAnnual;
         private Integer workDay;
@@ -35,6 +36,7 @@ public class AdminDto {
             return ResponseMember.builder()
                     .id(entity.getId())
                     .name(entity.getName())
+                    .email(entity.getEmail())
                     .employeeNumber("#" + entity.getEmployeeNumber().substring(4, 8))
                     .restAnnual(entity.getRestAnnual())
                     .workDay(entity.getWorkDay())
