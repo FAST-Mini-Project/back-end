@@ -18,6 +18,7 @@ public class AnnualDto {
         String getName();
         String getEmployeeNumber();
         Date getDate();
+        AnnualStatus getStatus();
     }
 
     public interface MemberAnnualResponse{
