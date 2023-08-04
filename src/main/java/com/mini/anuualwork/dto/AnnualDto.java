@@ -1,7 +1,6 @@
 package com.mini.anuualwork.dto;
 
 import com.mini.anuualwork.entity.type.AnnualStatus;
-import lombok.Data;
 
 import java.sql.Date;
 
@@ -12,6 +11,7 @@ public class AnnualDto {
         String getName();
         String getEmployeeNumber();
         Date getDate();
+        AnnualStatus getStatus();
     }
 
     public interface MemberAnnualResponse{
