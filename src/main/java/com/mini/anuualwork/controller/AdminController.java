@@ -17,6 +17,11 @@ public class AdminController {
 
     private final AdminService adminService;
 
+    @GetMapping
+    public ApiDataResponse<?> checkAdminAuth() {
+        return this.adminService.checkAdminAuth();
+    }
+
     @GetMapping("/user")
     public ApiDataResponse<List<ResponseMember>> allMemberList() {
         return this.adminService.getAllMembers();
