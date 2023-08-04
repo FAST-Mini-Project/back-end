@@ -1,6 +1,7 @@
 package com.mini.anuualwork.service;
 
 import com.mini.anuualwork.core.ApiDataResponse;
+import com.mini.anuualwork.dto.CorrectDto;
 import com.mini.anuualwork.dto.LoginDto;
 import com.mini.anuualwork.dto.LogoutDto;
 import com.mini.anuualwork.dto.SignupDto;
@@ -94,6 +95,29 @@ public class UserService {
         JwtUtil.deleteJwt(token,secretKey);
         return new ApiDataResponse<>(new LogoutDto());
     }
+
+    public ApiDataResponse<CorrectDto.CorrectSuccess> correct(CorrectDto correctDto,String token) {
+
+        Member member = loginMemberRepository.findByEmail(correctDto.getEmail()).
+                orElseThrow(() -> new RuntimeException("잘못된 유저 이메일입니다."));
+
+        if(!JwtUtil.getEmail(token,secretKey).equals(correctDto.getEmail())){
+            throw new RuntimeException("사용자 토큰 정보가 일치하지 않습니다.");
+        }
+
+
+        if(!bCryptPasswordEncoder.matches(correctDto.getOldPassword(), member.getPassword())){
+            throw new RuntimeException("잘못된 비밀번호입니다.");
+        }
+
+        member.setPassword(bCryptPasswordEncoder.encode(correctDto.getNewPassword()));
+        loginMemberRepository.save(member);
+
+
+        return new ApiDataResponse<>(new CorrectDto.CorrectSuccess());
+    }
+
+
 }
 
 
