@@ -42,4 +42,10 @@ public class AnnualController {
         return annualService.requestAnnual(authentication.getName(), request);
     }
 
+    //개인 연차 취소 및 취소 신청
+    @PostMapping("/api/user/annual/{id}")
+    public ApiDataResponse<?> updateAnnual(Authentication authentication, @PathVariable Long id){
+        return annualService.updateAnnual(authentication.getName(), id);
+    }
+
 }
