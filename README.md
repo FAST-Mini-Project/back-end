@@ -114,7 +114,7 @@ com
 <br><br>
 
 ## 📖 API 명세
-<img width="815" alt="image" src="https://github.com/khsrla9806/practice-readme/assets/70641477/26e98d00-3c68-494c-93dc-f78511f94319">
+<img width="815" alt="image" src="https://github.com/FAST-Mini-Project/back-end/assets/70641477/255d45af-d72a-4f1b-a52d-2b230a3f74cd">
 
 <br><br>
 
