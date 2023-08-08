@@ -25,4 +25,7 @@ public interface WorkRepository extends JpaRepository<Work, Long> {
             "on w.member.id = m.id " +
             "where YEAR(date) = :year and MONTH(date) = :month and m.email = :email")
     List<WorkDto.MemberWorkResponse> findWorks(@Param("email") String email, @Param("year") Integer year, @Param("month") Integer month);
+
+    @Query("SELECT COUNT(w) FROM Work w WHERE w.member = :member AND SUBSTRING(w.date, 1, 10) = :date")
+    Long findWorkByMemberAndDate(@Param("member") Member member, @Param("date") String date);
 }
