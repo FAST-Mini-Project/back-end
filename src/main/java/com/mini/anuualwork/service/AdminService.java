@@ -17,6 +17,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.mini.anuualwork.dto.message.AdminResponseMessage.*;
+import static com.mini.anuualwork.exception.message.AdminErrorMessage.*;
+
 @RequiredArgsConstructor
 @Service
 public class AdminService {
@@ -27,15 +30,15 @@ public class AdminService {
     private final AnnualRepository annualRepository;
 
     public ApiDataResponse<?> checkAdminAuth() {
-        return new ApiDataResponse<>("관리자 접근 권한이 확인되었습니다.");
+        return new ApiDataResponse<>(VERIFIED_ADMIN);
     }
 
     public ApiDataResponse<List<ResponseMember>> getAllMembers() {
-        List<ResponseMember> allMembers =
-                memberRepository.getAllMembersWithAnnualCountAndWorkCount(TOTAL_ANNUAL_COUNT, getThisYear())
-                        .stream()
-                        .map(ResponseMember::fromEntity)
-                        .collect(Collectors.toList());
+        List<ResponseMember> allMembers = memberRepository
+                .getAllMembersWithAnnualCountAndWorkCount(TOTAL_ANNUAL_COUNT, getThisYear())
+                .stream()
+                .map(ResponseMember::fromEntity)
+                .collect(Collectors.toList());
 
         return new ApiDataResponse<>(allMembers);
     }
@@ -43,38 +46,39 @@ public class AdminService {
     @Transactional
     public ApiDataResponse<ResponseSuccess> deleteMember(Long id) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저입니다."));
+                .orElseThrow(() -> new RuntimeException(NOT_FOUND_MEMBER));
 
         annualRepository.deleteAllByMember(member);
         workRepository.deleteAllByMember(member);
         memberRepository.delete(member);
 
-        return new ApiDataResponse<>(new ResponseSuccess("사원 계정이 정상적으로 삭제되었습니다."));
+        return new ApiDataResponse<>(new ResponseSuccess(SUCCESS_DELETE_MEMBER));
     }
 
     @Transactional
     public ApiDataResponse<ResponseSuccess> createWork(RequestCreateWork dto) {
         Member member = memberRepository.findById(dto.getId())
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 유저입니다."));
+                .orElseThrow(() -> new RuntimeException(NOT_FOUND_MEMBER));
 
         Work work = dto.toEntity(member);
         workRepository.save(work);
 
-        return new ApiDataResponse<>(new ResponseSuccess("당직등록에 성공했습니다."));
+        return new ApiDataResponse<>(new ResponseSuccess(SUCCESS_CREATE_WORK));
     }
 
     @Transactional
     public ApiDataResponse<ResponseSuccess> deleteWork(Long workId) {
         Work work = workRepository.findById(workId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 당직 정보입니다."));
+                .orElseThrow(() -> new RuntimeException(NOT_FOUND_WORK));
 
         workRepository.delete(work);
 
-        return new ApiDataResponse<>(new ResponseSuccess("당직이 삭제되었습니다."));
+        return new ApiDataResponse<>(new ResponseSuccess(SUCCESS_DELETE_WORK));
     }
 
     public ApiDataResponse<List<ResponseAnnual>> getAnnualList() {
-        List<ResponseAnnual> response = this.annualRepository.findAnnualsIsUnapprovedOrCanceled(getThisYear())
+        List<ResponseAnnual> response = this.annualRepository
+                .findAnnualsIsUnapprovedOrCanceled(getThisYear())
                 .stream()
                 .map(ResponseAnnual::fromEntity)
                 .collect(Collectors.toList());
@@ -89,18 +93,18 @@ public class AdminService {
     @Transactional
     public ApiDataResponse<ResponseSuccess> approveAnnual(Long annualId) {
         Annual annual = annualRepository.findById(annualId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 연차 정보입니다."));
+                .orElseThrow(() -> new RuntimeException(NOT_FOUND_ANNUAL));
 
         AnnualStatus status = annual.getStatus();
         ResponseSuccess responseDto = new ResponseSuccess();
         if (status == AnnualStatus.APPROVED) {
-            throw new RuntimeException("이미 승인된 연차 정보입니다.");
+            throw new RuntimeException(ALREADY_APPROVED_ANNUAL);
         } else if (status == AnnualStatus.UNAPPROVED) {
             annual.setStatus(AnnualStatus.APPROVED);
-            responseDto.setMessage("연차 승인이 완료되었습니다.");
+            responseDto.setMessage(SUCCESS_APPROVE_ANNUAL);
         } else if (status == AnnualStatus.CANCELED) {
             annualRepository.delete(annual);
-            responseDto.setMessage("연차 취소 신청이 승인되었습니다.");
+            responseDto.setMessage(SUCCESS_APPROVE_ANNUAL_CANCEL);
         }
 
         return new ApiDataResponse<>(responseDto);
@@ -109,18 +113,18 @@ public class AdminService {
     @Transactional
     public ApiDataResponse<ResponseSuccess> rejectAnnual(Long annualId) {
         Annual annual = annualRepository.findById(annualId)
-                .orElseThrow(() -> new RuntimeException("존재하지 않는 연차 정보입니다."));
+                .orElseThrow(() -> new RuntimeException(NOT_FOUND_ANNUAL));
 
         AnnualStatus status = annual.getStatus();
         ResponseSuccess responseDto = new ResponseSuccess();
         if (status == AnnualStatus.APPROVED) {
-            throw new RuntimeException("이미 승인된 연차 정보입니다.");
+            throw new RuntimeException(ALREADY_APPROVED_ANNUAL);
         } else if (status == AnnualStatus.UNAPPROVED) {
             annualRepository.delete(annual);
-            responseDto.setMessage("연차 신청을 거부했습니다. 해당 연차 데이터는 삭제됩니다.");
+            responseDto.setMessage(SUCCESS_REJECT_ANNUAL);
         } else if (status == AnnualStatus.CANCELED) {
             annual.setStatus(AnnualStatus.APPROVED);
-            responseDto.setMessage("연차 취소 신청이 거부되었습니다.");
+            responseDto.setMessage(SUCCESS_REJECT_ANNUAL_CANCEL);
         }
 
         return new ApiDataResponse<>(responseDto);
