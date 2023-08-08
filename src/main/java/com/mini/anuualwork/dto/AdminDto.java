@@ -1,14 +1,18 @@
 package com.mini.anuualwork.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mini.anuualwork.entity.Member;
 import com.mini.anuualwork.entity.Work;
 import com.mini.anuualwork.entity.type.AnnualStatus;
 import lombok.*;
 
 import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static com.mini.anuualwork.dto.message.ValidationMessage.*;
 
@@ -59,13 +63,13 @@ public class AdminDto {
         private Long id;
 
         @NotNull(message = NOT_NULL_DATE)
-        @Future(message = DATE_REQUIRED_FUTURE)
-        private Timestamp date;
+        @FutureOrPresent(message = DATE_REQUIRED_FUTURE)
+        private LocalDate date;
 
         public Work toEntity(Member member) {
             Work work = new Work();
             work.setMember(member);
-            work.setDate(this.date.toLocalDateTime());
+            work.setDate(LocalDateTime.of(this.date, LocalTime.now()));
 
             return work;
         }
