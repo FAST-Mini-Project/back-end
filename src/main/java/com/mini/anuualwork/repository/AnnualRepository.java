@@ -42,5 +42,7 @@ public interface AnnualRepository extends JpaRepository<Annual, Long> {
 
     @Query("SELECT COUNT(a) FROM Annual a WHERE a.member = :member AND SUBSTRING(a.date, 1, 10) = :date")
     Long findAnnualByMemberAndDate(@Param("member") Member member, @Param("date") String date);
+
+    Long countByMember(Member member);
 }
 

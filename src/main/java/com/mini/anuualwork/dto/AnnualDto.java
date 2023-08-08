@@ -8,8 +8,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
 import java.sql.Date;
-import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class AnnualDto {
 
@@ -41,13 +45,15 @@ public class AnnualDto {
     @Data
     public static class AnnualDate{
 
-        private Timestamp date;
+        @NotNull(message = "Date는 필수 값입니다.")
+        @FutureOrPresent(message = "현재 날짜 이후만 선택 가능합니다.")
+        private LocalDate date;
         private AnnualStatus status;
         private Member member;
 
         public Annual toEntity(){
             Annual annual = new Annual();
-            annual.setDate(this.date.toLocalDateTime());
+            annual.setDate(LocalDateTime.of(this.date, LocalTime.now()));
 
             return annual;
         }
