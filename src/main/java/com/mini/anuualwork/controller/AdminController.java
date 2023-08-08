@@ -3,10 +3,13 @@ package com.mini.anuualwork.controller;
 import com.mini.anuualwork.core.ApiDataResponse;
 import com.mini.anuualwork.dto.AdminDto.*;
 import com.mini.anuualwork.service.AdminService;
+import com.mini.anuualwork.utils.ValidationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Slf4j
@@ -33,7 +36,10 @@ public class AdminController {
     }
 
     @PostMapping("/work")
-    public ApiDataResponse<ResponseSuccess> createWork(@RequestBody RequestCreateWork dto) {
+    public ApiDataResponse<ResponseSuccess> createWork(
+            @Valid @RequestBody RequestCreateWork dto, BindingResult bindingResult) {
+        ValidationUtils.checkValidation(bindingResult);
+
         return this.adminService.createWork(dto);
     }
 
