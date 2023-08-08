@@ -16,7 +16,6 @@ public class CustomUserDetails implements UserDetails {
 
     private final Member user;
 
-    // 시큐리티는 이 친구를 보고 어떤 권한이 있는지 확인
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getMemberRole().name());
