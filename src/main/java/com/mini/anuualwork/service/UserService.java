@@ -85,7 +85,6 @@ public class UserService {
         member.setEmployeeNumber(joinRequestDto.getEmployeeNumber());
         member.setName(joinRequestDto.getName());
         loginMemberRepository.save(member);
-        log.info("회원가입 처리가 완료되었습니다. {}",member);
         return new ApiDataResponse<>(new SignupDto.ResponseSignupSuccess());
 
 
