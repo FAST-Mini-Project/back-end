@@ -1,6 +1,5 @@
 package com.mini.anuualwork.dto;
 
-
 import lombok.Data;
 
 @Data

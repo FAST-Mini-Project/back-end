@@ -1,7 +1,7 @@
 package com.mini.anuualwork.component;
 
 import com.mini.anuualwork.entity.Member;
-import com.mini.anuualwork.repository.LoginMemberRepository;
+import com.mini.anuualwork.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
-    private final LoginMemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     @Override
     public UserDetails loadUserByUsername(final String email) {

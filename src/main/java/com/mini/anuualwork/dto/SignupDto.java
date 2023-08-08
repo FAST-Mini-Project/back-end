@@ -1,17 +1,15 @@
 package com.mini.anuualwork.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
+import lombok.Data;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
 public class SignupDto {
 
-    @Email(message = "이메일 형식에 어긋납니다.")
+    @Pattern(regexp = "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$", message = "이메일 형식에 어긋납니다.")
     @NotBlank(message = "이메일은 필수 입력 사항입니다.")
     private String email;
 
@@ -24,7 +22,6 @@ public class SignupDto {
     private String password;
 
     private String employeeNumber;
-
 
 
     @Data

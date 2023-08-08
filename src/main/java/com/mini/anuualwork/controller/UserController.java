@@ -6,33 +6,32 @@ import com.mini.anuualwork.dto.LoginDto;
 import com.mini.anuualwork.dto.LogoutDto;
 import com.mini.anuualwork.dto.SignupDto;
 import com.mini.anuualwork.service.UserService;
+import com.mini.anuualwork.utils.ValidationUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class UserController {
 
    private final UserService userService;
 
    @RequestMapping(value = "/api/login", method = RequestMethod.POST)
-   public ApiDataResponse<LoginDto.ResponseLoginSuccess> login(@RequestBody LoginDto loginDto){
+   public ApiDataResponse<LoginDto.ResponseLoginSuccess> login(@Valid @RequestBody LoginDto loginDto,
+                                                               BindingResult bindingResult){
+       ValidationUtils.checkValidation(bindingResult);
        return userService.login(loginDto.getEmail(),loginDto.getPassword());
    }
 
-   @PostMapping("/api/test")
-   public ResponseEntity<String> test(Authentication authentication){
-       return ResponseEntity.ok().body(authentication.getName());
-   }
-
     @RequestMapping(value = "/api/signup", method = RequestMethod.POST)
-    public ApiDataResponse<SignupDto.ResponseSignupSuccess> signup(@RequestBody SignupDto signupDto){
-       return userService.join(signupDto);
+    public ApiDataResponse<SignupDto.ResponseSignupSuccess> signup(@Valid @RequestBody SignupDto signupDto,
+                                                                   BindingResult bindingResult){
+        ValidationUtils.checkValidation(bindingResult);
+        return userService.join(signupDto);
     }
 
     @RequestMapping(value = "/api/logout", method = RequestMethod.POST)
@@ -42,10 +41,11 @@ public class UserController {
     }
 
     @RequestMapping(value = "/api/user", method = RequestMethod.PUT)
-    public ApiDataResponse<CorrectDto.CorrectSuccess> correct(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization, @RequestBody CorrectDto correctDto){
+    public ApiDataResponse<CorrectDto.CorrectSuccess> correct(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorization,
+                                                              @Valid @RequestBody CorrectDto correctDto,
+                                                              BindingResult bindingResult){
+        ValidationUtils.checkValidation(bindingResult);
         String token = authorization.split(" ")[1];
-       return userService.correct(correctDto, token);
+        return userService.correct(correctDto, token);
     }
-
-
 }
