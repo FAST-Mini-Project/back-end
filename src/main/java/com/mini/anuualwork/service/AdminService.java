@@ -14,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -61,10 +63,29 @@ public class AdminService {
         Member member = memberRepository.findById(dto.getId())
                 .orElseThrow(() -> new AdminException(NOT_FOUND_MEMBER));
 
+        checkAlreadyExistsWork(member, dto.getDate());
+        checkAlreadyExistAnnual(member, dto.getDate());
+
         Work work = dto.toEntity(member);
         workRepository.save(work);
 
         return new ApiDataResponse<>(new ResponseSuccess(SUCCESS_CREATE_WORK));
+    }
+
+    private void checkAlreadyExistsWork(Member member, LocalDate date) {
+        Long countWork = workRepository.findWorkByMemberAndDate(member, date.toString());
+
+        if (countWork > 0L) {
+            throw new AdminException(ALREADY_EXIST_WORK);
+        }
+    }
+
+    private void checkAlreadyExistAnnual(Member member, LocalDate date) {
+        Long countAnnual = annualRepository.findAnnualByMemberAndDate(member, date.toString());
+
+        if (countAnnual > 0L) {
+            throw new AdminException(ALREADY_EXIST_ANNUAL);
+        }
     }
 
     @Transactional
