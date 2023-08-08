@@ -19,13 +19,15 @@ public class WorkController {
 
     //일정 목록 조회(당직)
     @GetMapping("/api/schedule/work")
-    public ApiDataResponse<List<WorkDto.WorkInfoResponse>> getWorkInfoList(@RequestParam Integer year, @RequestParam Integer month){
+    public ApiDataResponse<List<WorkDto.WorkInfoResponse>> getWorkInfoList(
+            @RequestParam Integer year, @RequestParam Integer month){
         return workService.getWorkInfoList(year, month);
     }
 
     //개인 당직 조회
     @GetMapping("/api/user/work")
-    public ApiDataResponse<?> getMemberWorkList(Authentication authentication, @RequestParam Integer year, @RequestParam Integer month){
+    public ApiDataResponse<?> getMemberWorkList(
+            Authentication authentication, @RequestParam Integer year, @RequestParam Integer month){
         return workService.getMemberWorkList(authentication.getName(), year, month);
     }
 
