@@ -31,21 +31,16 @@ public class JwtFilter extends OncePerRequestFilter {
     //여기를 통해서 들어갈 수 있다, 권한을 부여해줄 수 있다(DB에 있거나,없거나(하드코딩))
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info("시크릿 키 {}", secretKey);
         //Header에서 authorization을 꺼내온다.
         final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-        log.info("authorization 분리됨 : {}", authorization);
 
         if(authorization == null || !authorization.startsWith("Bearer ")){
-            log.info("토큰이 없거나, Bearer로 시작하지 않습니다.");
             filterChain.doFilter(request,response);
             return;
         }
 
         //token 꺼내기
         String token = authorization.split(" ")[1];
-        log.info("토큰을 꺼냅니다 {}",token);
-
 
         //token의 유효기간 확인
         if(JwtUtil.isExpired(token,secretKey)){
@@ -56,7 +51,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         //email 꺼내기
         String userName = JwtUtil.getEmail(token,secretKey);
-        log.info("이름을 꺼냅니다. {}",userName);
         String role = JwtUtil.getRole(token,secretKey);
 
         // 권한 부여

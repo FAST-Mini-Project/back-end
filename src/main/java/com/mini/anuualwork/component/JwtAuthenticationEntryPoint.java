@@ -26,7 +26,6 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
             HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
 
-        log.info("인가 받지 않은 요청입니다.");
 
         // 인가 받지 않은 요청에 대한 에러 처리는 401 UNAUTHORIZED 처리
         ApiErrorResponse errorResponse = new ApiErrorResponse(new String[]{"인가 받지 않은 요청입니다."});
