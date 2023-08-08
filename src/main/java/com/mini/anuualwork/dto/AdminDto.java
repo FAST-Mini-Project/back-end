@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import static com.mini.anuualwork.dto.message.ValidationMessage.*;
+
 public class AdminDto {
 
     /* 집계 쿼리가 포함된 JPQL Projection 결과를 Converting 하기 위해서는 interface + Getter 사용 */
@@ -54,11 +56,11 @@ public class AdminDto {
 
     @Data
     public static class RequestCreateWork {
-        @NotNull
+        @NotNull(message = NOT_NULL_ID)
         private Long id;
 
-        @NotNull
-        @Future
+        @NotNull(message = NOT_NULL_DATE)
+        @Future(message = DATE_REQUIRED_FUTURE)
         private Timestamp date;
 
         public Work toEntity(Member member) {
