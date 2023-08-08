@@ -2,9 +2,7 @@ package com.mini.anuualwork.config;
 
 import com.mini.anuualwork.component.JwtAccessDeniedHandler;
 import com.mini.anuualwork.component.JwtAuthenticationEntryPoint;
-import com.mini.anuualwork.service.UserService;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,29 +56,25 @@ public class AuthenticationConfig {
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .antMatchers("/api/user/**", "/api/schedule/**").hasAnyRole("USER", "ADMIN")
                 .antMatchers(permitAllEndPoints).permitAll()
-                .anyRequest().authenticated() // 위에 지정한 antMatchers 이외에는 모두 인증 받아야 한다.
+                .anyRequest().authenticated()
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt사용하는 경우 쓴다는데 더 공부해야 할듯?(to do)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(new JwtFilter(secretKey), UsernamePasswordAuthenticationFilter.class)
-                //UserNamePasswordAuthenticationFilter적용하기 전에 JWTTokenFilter를 적용 하라는 뜻
                 .build();
     }
 
     public CorsConfigurationSource configurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
-        configuration.addAllowedMethod("*"); // GET, POST, PUT, DELETE (Javascript 요청 허용)
-        // localhost:8080 백엔드, localhost:3000 프론트엔드
-        configuration.addAllowedOriginPattern("*"); // 모든 IP 주소 허용 (프론트 앤드 IP만 허용 react)
-        configuration.setAllowCredentials(true); // 클라이언트에서 쿠키 요청 허용
-        configuration.addExposedHeader("Authorization"); // 옛날에는 디폴트 였다. 지금은 아닙니다.
+        configuration.addAllowedMethod("*");
+        configuration.addAllowedOriginPattern("*");
+        configuration.setAllowCredentials(true);
+        configuration.addExposedHeader("Authorization");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // /login, /board, /product/
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
-
-
 }
 
