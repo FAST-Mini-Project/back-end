@@ -14,7 +14,6 @@ import static com.mini.anuualwork.dto.message.ValidationMessage.*;
 
 public class AdminDto {
 
-    /* 집계 쿼리가 포함된 JPQL Projection 결과를 Converting 하기 위해서는 interface + Getter 사용 */
     public interface ResponseMemberEntity {
         Long getId();
         String getName();
@@ -72,7 +71,6 @@ public class AdminDto {
         }
     }
 
-    /* Projection 결과를 받아서 @Value()에서 Client 에서 원하는 데이터로 가공 */
     public interface ResponseAnnualEntity {
         Long getAnnualId();
         String getName();
