@@ -4,6 +4,10 @@
   <br>
   <h1>당연해 (당직 & 연차 관리 프로그램) <a href="https://dangyeonhae.netlify.app">🔗</a></h1>
   <br>
+  
+  [**`🔗 Front-End 저장소로 이동하기 👈🏻`**](https://github.com/FAST-Mini-Project/front-end)
+  <br><br>
+  [**`🔗 배포된 링크로 이동하기 👈🏻`**](https://dangyeonhae.netlify.app)
 </div>
 
 <br>
@@ -24,8 +28,6 @@
 | :-----------------: | :--------: | :--------: | :-------: | :-------: | :-------: |
 | <img src="https://avatars.githubusercontent.com/u/70641477?v=4" width="150"> |<img src="https://avatars.githubusercontent.com/u/72866347?s=96&v=4" width="150">  | <img src="https://avatars.githubusercontent.com/u/104764933?s=96&v=4" width="150"> | <img src="https://avatars.githubusercontent.com/u/84277185?s=96&v=4" width="150"> | <img src="https://avatars.githubusercontent.com/u/125433485?v=4" width="150">  | <img src="https://avatars.githubusercontent.com/u/128157440?s=96&v=4" width="150">  |
 | [김훈섭](https://github.com/khsrla9806)            | [김경호](https://github.com/KimGyeongHo-com)   | [강경민](https://github.com/redbean00)   | [김경원](https://github.com/ruddnjs3769)  | [윤금엽](https://github.com/DevYBecca)  | [황인승](https://github.com/hwanginseung)  |
-
-[`🔗 Front-End Repository 이동하기`](https://github.com/FAST-Mini-Project/front-end)
 
 <br><br>
 
@@ -115,6 +117,60 @@ com
 
 ## 📖 API 명세
 <img width="815" alt="image" src="https://github.com/FAST-Mini-Project/back-end/assets/70641477/255d45af-d72a-4f1b-a52d-2b230a3f74cd">
+
+<br><br>
+
+## 🖥️ 프로젝트 실행 방법
+- 프로젝트 파일 클론
+```bash
+>> git clone git@github.com:FAST-Mini-Project/back-end.git
+```
+
+<br>
+
+- application.yml 설정
+```yaml
+spring:
+  datasource:
+    url: jdbc:mysql://[IP]:[Port]/[데이터베이스 스키마]
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: [데이터베이스 유저네임]
+    password: [데이터베이스 비밀번호]
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: [ddl-auto 설정 (create, create-drop, none)]
+    properties:
+      hibernate:
+        format_sql: true
+
+# JWT 설정
+jwt:
+  secret: [JWT 토큰 발행에 필요한 시크릿키]
+
+```
+
+<br>
+
+- 프로젝트 빌드
+```bash
+>> ./gradlew clean build
+```
+
+<br>
+
+- jar 파일 실행
+```bash
+>> java -jar ./build/libs/anuualwork-0.0.1-SNAPSHOT.jar
+```
+
+<br><br>
+
+## ► 프로젝트 시현
+![당연해](https://github.com/FAST-Mini-Project/back-end/assets/70641477/6192154f-04a9-4e24-a815-31b52ff0773d)
+
+
 
 <br><br>
 
