@@ -1,6 +1,7 @@
 package com.mini.anuualwork.exception.handler;
 
 import com.mini.anuualwork.core.ApiErrorResponse;
+import com.mini.anuualwork.exception.AdminException;
 import com.mini.anuualwork.exception.InvalidationException;
 import com.mini.anuualwork.exception.UserException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -27,6 +28,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserException.class)
     public ApiErrorResponse handleUserException(UserException userException) {
         String[] errorMessages = {userException.getMessage()};
+
+        return new ApiErrorResponse(errorMessages);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(AdminException.class)
+    public ApiErrorResponse handleAdminException(AdminException adminException) {
+        String[] errorMessages = {adminException.getMessage()};
 
         return new ApiErrorResponse(errorMessages);
     }

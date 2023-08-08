@@ -6,6 +6,7 @@ import com.mini.anuualwork.entity.Annual;
 import com.mini.anuualwork.entity.Member;
 import com.mini.anuualwork.entity.Work;
 import com.mini.anuualwork.entity.type.AnnualStatus;
+import com.mini.anuualwork.exception.AdminException;
 import com.mini.anuualwork.repository.AnnualRepository;
 import com.mini.anuualwork.repository.MemberRepository;
 import com.mini.anuualwork.repository.WorkRepository;
@@ -46,7 +47,7 @@ public class AdminService {
     @Transactional
     public ApiDataResponse<ResponseSuccess> deleteMember(Long id) {
         Member member = memberRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException(NOT_FOUND_MEMBER));
+                .orElseThrow(() -> new AdminException(NOT_FOUND_MEMBER));
 
         annualRepository.deleteAllByMember(member);
         workRepository.deleteAllByMember(member);
@@ -58,7 +59,7 @@ public class AdminService {
     @Transactional
     public ApiDataResponse<ResponseSuccess> createWork(RequestCreateWork dto) {
         Member member = memberRepository.findById(dto.getId())
-                .orElseThrow(() -> new RuntimeException(NOT_FOUND_MEMBER));
+                .orElseThrow(() -> new AdminException(NOT_FOUND_MEMBER));
 
         Work work = dto.toEntity(member);
         workRepository.save(work);
@@ -69,7 +70,7 @@ public class AdminService {
     @Transactional
     public ApiDataResponse<ResponseSuccess> deleteWork(Long workId) {
         Work work = workRepository.findById(workId)
-                .orElseThrow(() -> new RuntimeException(NOT_FOUND_WORK));
+                .orElseThrow(() -> new AdminException(NOT_FOUND_WORK));
 
         workRepository.delete(work);
 
@@ -93,12 +94,12 @@ public class AdminService {
     @Transactional
     public ApiDataResponse<ResponseSuccess> approveAnnual(Long annualId) {
         Annual annual = annualRepository.findById(annualId)
-                .orElseThrow(() -> new RuntimeException(NOT_FOUND_ANNUAL));
+                .orElseThrow(() -> new AdminException(NOT_FOUND_ANNUAL));
 
         AnnualStatus status = annual.getStatus();
         ResponseSuccess responseDto = new ResponseSuccess();
         if (status == AnnualStatus.APPROVED) {
-            throw new RuntimeException(ALREADY_APPROVED_ANNUAL);
+            throw new AdminException(ALREADY_APPROVED_ANNUAL);
         } else if (status == AnnualStatus.UNAPPROVED) {
             annual.setStatus(AnnualStatus.APPROVED);
             responseDto.setMessage(SUCCESS_APPROVE_ANNUAL);
@@ -113,12 +114,12 @@ public class AdminService {
     @Transactional
     public ApiDataResponse<ResponseSuccess> rejectAnnual(Long annualId) {
         Annual annual = annualRepository.findById(annualId)
-                .orElseThrow(() -> new RuntimeException(NOT_FOUND_ANNUAL));
+                .orElseThrow(() -> new AdminException(NOT_FOUND_ANNUAL));
 
         AnnualStatus status = annual.getStatus();
         ResponseSuccess responseDto = new ResponseSuccess();
         if (status == AnnualStatus.APPROVED) {
-            throw new RuntimeException(ALREADY_APPROVED_ANNUAL);
+            throw new AdminException(ALREADY_APPROVED_ANNUAL);
         } else if (status == AnnualStatus.UNAPPROVED) {
             annualRepository.delete(annual);
             responseDto.setMessage(SUCCESS_REJECT_ANNUAL);
