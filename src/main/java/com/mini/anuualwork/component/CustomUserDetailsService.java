@@ -20,7 +20,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isEmpty()) {
-            log.info("DB에 해당 이메일을 가진 사용자가 존재하지 않습니다.");
             return null;
         }
 

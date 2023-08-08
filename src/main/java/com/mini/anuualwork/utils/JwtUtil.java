@@ -31,7 +31,6 @@ public class JwtUtil {
         Claims claims = Jwts.claims();
         claims.put("email",email);
         claims.put("role",role);
-        log.info("토큰이 발급되었습니다. 발급된 이메일 {}",email);
 
         return Jwts.builder()
                 .setClaims(claims) // 유저 정보 설정
@@ -43,7 +42,6 @@ public class JwtUtil {
     public static String deleteJwt(String token,String secretKey){
         Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         claims.setExpiration(new Date(0)); // 만료일을 과거 날짜로 설정 (1970년 1월 1일) -> 만료된 토큰이 됨.
-        log.info("토큰을 만료시킵니다");
         return Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS256, secretKey)

@@ -26,7 +26,6 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
             HttpServletResponse response,
             AccessDeniedException accessDeniedException) throws IOException, ServletException {
 
-        log.info("접근 권한이 없습니다.");
 
         // 접근 권한이 존재하지 않는 경우에는 403 FORBIDDEN 처리
         ApiErrorResponse errorResponse = new ApiErrorResponse(new String[]{"접근 권한이 없습니다."});
