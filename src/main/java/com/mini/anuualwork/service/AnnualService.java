@@ -7,10 +7,12 @@ import com.mini.anuualwork.entity.Member;
 import com.mini.anuualwork.entity.type.AnnualStatus;
 import com.mini.anuualwork.repository.AnnualRepository;
 import com.mini.anuualwork.repository.MemberRepository;
+import com.mini.anuualwork.repository.WorkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -19,6 +21,7 @@ public class AnnualService {
 
     private final AnnualRepository annualRepository;
     private final MemberRepository memberRepository;
+    private final WorkRepository workRepository;
 
     public ApiDataResponse<List<AnnualDto.AnnualInfoResponse>> getAnnualInfoList(Integer year, Integer month) {
         List<AnnualDto.AnnualInfoResponse> annualList = annualRepository.findAllByMember(year, month);
@@ -33,8 +36,11 @@ public class AnnualService {
     }
 
     @Transactional
-    public ApiDataResponse<?> requestAnnual(String email, AnnualDto.AnnualDate annualDate) {
+    public ApiDataResponse<?> createAnnual(String email, AnnualDto.AnnualDate annualDate) {
         Member member = memberRepository.findMemberByEmail(email);
+
+        checkDate(member, annualDate.getDate());
+        checkAnnual(member);
 
         Annual annual = annualDate.toEntity();
         annual.setMember(member);
@@ -67,5 +73,27 @@ public class AnnualService {
         }
 
         return new ApiDataResponse<>(response);
+    }
+
+    public void checkDate(Member member, LocalDate date){
+        Long count = annualRepository.findAnnualByMemberAndDate(member, date.toString());
+
+        if(count > 0){
+            throw new RuntimeException("이미 연차를 신청한 날짜입니다.");
+        }
+
+        count = workRepository.findWorkByMemberAndDate(member, date.toString());
+        if(count > 0){
+            throw new RuntimeException("이미 해당 날짜에 당직이 등록되어 있습니다. 해당 날짜의 당직을 확인해주세요.");
+        }
+    }
+
+    public void checkAnnual(Member member){
+        Long count = annualRepository.countByMember(member);
+
+        if(count >= 15){
+            throw new RuntimeException("사용 가능한 연차가 존재하지 않습니다.");
+        }
+
     }
 }
