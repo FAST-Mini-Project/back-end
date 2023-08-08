@@ -6,9 +6,9 @@ import com.mini.anuualwork.entity.Annual;
 import com.mini.anuualwork.entity.Member;
 import com.mini.anuualwork.entity.Work;
 import com.mini.anuualwork.entity.type.AnnualStatus;
-import com.mini.anuualwork.repository.AdminAnnualRepository;
-import com.mini.anuualwork.repository.AdminMemberRepository;
-import com.mini.anuualwork.repository.AdminWorkRepository;
+import com.mini.anuualwork.repository.AnnualRepository;
+import com.mini.anuualwork.repository.MemberRepository;
+import com.mini.anuualwork.repository.WorkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +22,9 @@ import java.util.stream.Collectors;
 public class AdminService {
     private static final Long TOTAL_ANNUAL_COUNT = 15L;
 
-    private final AdminMemberRepository memberRepository;
-    private final AdminWorkRepository workRepository;
-    private final AdminAnnualRepository annualRepository;
+    private final MemberRepository memberRepository;
+    private final WorkRepository workRepository;
+    private final AnnualRepository annualRepository;
 
     public ApiDataResponse<?> checkAdminAuth() {
         return new ApiDataResponse<>("관리자 접근 권한이 확인되었습니다.");
