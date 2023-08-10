@@ -8,6 +8,8 @@
   [**`🔗 Front-End 저장소로 이동하기 👈🏻`**](https://github.com/FAST-Mini-Project/front-end)
   <br><br>
   [**`🔗 배포된 링크로 이동하기 👈🏻`**](https://dangyeonhae.netlify.app)
+  <br><br>
+  [**`🔗 발표자료 보러가기 👈🏻`**](https://drive.google.com/file/d/1xF5DoUv80Z8CPMxuL_F2O6O0yBcOYOXr/view?usp=sharing)
 </div>
 
 <br>
