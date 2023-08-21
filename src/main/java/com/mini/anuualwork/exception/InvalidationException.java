@@ -13,6 +13,7 @@ public class InvalidationException extends RuntimeException {
     public InvalidationException() {
     }
 
+
     public InvalidationException(List<FieldError> fieldErrors) {
         this.fieldErrors = fieldErrors;
     }
