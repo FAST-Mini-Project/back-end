@@ -202,3 +202,22 @@ jwt:
 [#이슈번호] chore: 약간 애매한 기타 변경사항
 [#이슈번호] docs: 리드미 파일이나 md 파일 수정할 때 (문서작업)
 ```
+
+<br><br>
+
+## 🙋🏻‍♂️ 코드리뷰 요청
+`강경민`
+> @Query에 작성한 쿼리 위주로 코드리뷰 받고 싶습니다. 🙆🏻‍♂️
+- [개인 연차 취소 및 취소 신청 기능 구현](https://github.com/redbean00/back-end/commit/525554a356205b7c675a6e7cbf377cc00e73768f)
+- [개인 당직 조회 기능 구현](https://github.com/redbean00/back-end/commit/03cebf370d358f2947f47ed1de58cd304a90f10b)
+- [개인 연차 조회 기능 구현](https://github.com/redbean00/back-end/commit/4d9a76bab74f42152b8896eadbe56656bc4e3828)
+- [연차 당직 조회 기능 구현](https://github.com/redbean00/back-end/commit/0f834e7083373b6f4848731ad8078d245e1bf436)
+
+`김훈섭`
+> Validation을 사용하는 모든 Controller에서 공통적으로 사용되는 코드라고 생각돼서 Utils 클래스로 분리를 해두었는데, 반복적이라도 그냥 각 Controller에서 각자 작성하는게 나았을지 궁금합니다. AOP로 해볼까 하다가 시간이 부족해서 그냥 넘겼던 부분인데, 궁금함이 남아서 리뷰 부탁 드립니다 🙆🏻‍♂️
+- [bindingResult 결과를 받아서 유효성 검사를 진행하는 ValidationUtils 추가](https://github.com/FAST-Mini-Project/back-end/commit/d2d685fc7fbc5270d959f78d99a9e36b4272cf22)
+- [ValidationUtils 사용하는 부분](https://github.com/FAST-Mini-Project/back-end/commit/e5b0d3cf485b1f28168aaf974299ff2a96d772e9)
+
+> @Query를 사용해서 쿼리 결과를 Projection할 때, JPQL 안에서 new 연산자를 통해서 DTO를 생성하거나, 인터페이스 구현(interface + getter)을 통해서 받아오는 방법이 있다고 해서, 제가 느끼기에는 interface + getter를 사용해서 결과를 받아오는 것이 가독성이 좋아보여서 이렇게 처리했는데, 혹시 현업에서 이런 경우가 있다면 어떤 방법을 이용해서 Projection 결과를 DTO에 담게 되나요? QueryDSL을 쓰면 좀더 깔끔하게 사용할 수 있다고 하는데, 해당 내용을 학습하기 이전이어서 리뷰 부탁드립니다! 🙆🏻‍♂️
+- [AdminDto 생성 후 JPQL Projection 결과를 담을 interface 구현](https://github.com/FAST-Mini-Project/back-end/commit/7d657a74e2a57553589e4a7794beffea230c261e)
+- [AdminMemberRepository 생성 후 JPQL을 사용하여 쿼리 메서드 구현](https://github.com/FAST-Mini-Project/back-end/commit/9efcc6825c506c0d73ae55483444c3cfedb27fa5)
